@@ -11,6 +11,9 @@ import kotlin.random.Random
 class DieFragment : Fragment() {
 
     val DIESIDE = "sidenumber"
+    val CURRENT_DIE_VALUE_KEY = "currentvalue"
+
+    private var currentValue: Int = 0
 
     lateinit var dieTextView: TextView
 
@@ -35,15 +38,42 @@ class DieFragment : Fragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(CURRENT_DIE_VALUE_KEY, currentValue)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        throwDie()
-        view.setOnClickListener{
+
+        if(savedInstanceState != null){
+            currentValue = savedInstanceState.getInt(CURRENT_DIE_VALUE_KEY, 1)
+            dieTextView.text = currentValue.toString()
+        }else{
             throwDie()
         }
+
     }
 
     fun throwDie() {
-        dieTextView.text = (Random.nextInt(dieSides) + 1).toString()
+        val rolledValue = (Random.nextInt(dieSides) + 1)
+        dieTextView.text = rolledValue.toString()
+        currentValue = rolledValue
     }
+
+    //adding companion that executes alongside the fragments instantiation
+
+    companion object {
+        private const val DIESIDE = "sidenumber"
+
+        fun newInstance(sides: Int): DieFragment {
+            val fragment = DieFragment()
+            fragment.arguments = Bundle().apply {
+                putInt(DIESIDE, sides)
+            }
+            return fragment
+        }
+    }
+
+
 }

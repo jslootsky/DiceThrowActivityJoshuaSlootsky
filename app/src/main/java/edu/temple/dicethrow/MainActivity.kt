@@ -14,7 +14,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //can potentially cause an error since this is executed asynchronously
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainerView, DieFragment.newInstance(20)) // Using newInstance()
+                .commit()
+        }
 
+        //since the only functionality is to click a button, not really an issue
         findViewById<Button>(R.id.rollDiceButton).setOnClickListener{
             (supportFragmentManager.
             findFragmentById(R.id.fragmentContainerView) as DieFragment)
