@@ -46,11 +46,11 @@ class DieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(savedInstanceState != null){
-            currentValue = savedInstanceState.getInt(CURRENT_DIE_VALUE_KEY, 1)
-            dieTextView.text = currentValue.toString()
-        }else{
+        if(savedInstanceState == null){
             throwDie()
+        }else{
+            currentValue = savedInstanceState.getInt(CURRENT_DIE_VALUE_KEY, 0)
+            dieTextView.text = currentValue.toString()
         }
 
     }
