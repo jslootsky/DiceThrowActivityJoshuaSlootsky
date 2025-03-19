@@ -8,16 +8,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import kotlin.random.Random
 
+private const val DIESIDE = "sidenumber"
+
 class DieFragment : Fragment() {
 
-    val DIESIDE = "sidenumber"
-    val CURRENT_DIE_VALUE_KEY = "currentvalue"
+    private val CURRENT_DIE_VALUE_KEY = "currentvalue"
 
     private var currentValue: Int = 0
 
-    lateinit var dieTextView: TextView
+    private lateinit var dieTextView: TextView
 
-    var dieSides: Int = 6
+    private var dieSides: Int = 6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +65,6 @@ class DieFragment : Fragment() {
     //adding companion that executes alongside the fragments instantiation
 
     companion object {
-        private const val DIESIDE = "sidenumber"
 
         fun newInstance(sides: Int): DieFragment {
             val fragment = DieFragment()
@@ -74,6 +74,4 @@ class DieFragment : Fragment() {
             return fragment
         }
     }
-
-
 }
