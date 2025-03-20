@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         //can potentially cause an error since this is executed asynchronously
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentContainerView, DieFragment.newInstance(20)) // Using newInstance()
+                .add(R.id.fragmentContainerView, DieFragment.newInstance(6)) // Using newInstance()
                 .commit()
         }
 
