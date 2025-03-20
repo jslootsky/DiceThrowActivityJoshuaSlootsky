@@ -3,10 +3,15 @@ package edu.temple.dicethrow
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlin.random.Random
 
 class DieViewModel : ViewModel() {
 
-    private var dieSides: Int = 6
+    var dieSides: Int = 6
+
+    fun updateDieSides(sides: Int){
+        dieSides = sides
+    }
 
     //liveData object does not change, only the objects inside of it
     //val currentRoll: MutableLiveData<Int> = MutableLiveData()
@@ -31,5 +36,9 @@ class DieViewModel : ViewModel() {
     //.value changes the value of the integer being stored inside of LiveData
     fun setCurrentRoll(roll: Int){
         currentRoll.value = roll
+    }
+
+    fun throwDie() {
+        setCurrentRoll(Random.nextInt(dieSides) + 1)
     }
 }

@@ -12,27 +12,22 @@ import kotlin.random.Random
 class DieFragment : Fragment() {
 
     val DIESIDE = "sidenumber"
-    val CURRENT_DIE_VALUE_KEY = "currentvalue"
-
-    private var currentValue: Int = 0
-
-    lateinit var dieTextView: TextView
 
     var dieSides: Int = 6
 
     //lateinit because it is an object
     lateinit var dieViewModel: DieViewModel
+    lateinit var dieTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            it.getInt(DIESIDE).run {
-                dieSides = this
-            }
+            dieSides = it.getInt(DIESIDE, dieSides)
         }
 
         //fragment is made the parent with 'this' meaning the activity cannot see the ViewModel instance
-        dieViewModel = ViewModelProvider(this)[DieViewModel::class.java]
+        dieViewModel = ViewModelProvider(requireActivity())[DieViewModel::class.java]
+        dieViewModel.updateDieSides(dieSides)
     }
 
     override fun onCreateView(
@@ -55,30 +50,16 @@ class DieFragment : Fragment() {
         }
 
         if(savedInstanceState == null){
-            throwDie()
+            dieViewModel.throwDie()
         }
 
     }
 
-    fun throwDie() {
-        dieViewModel.setCurrentRoll(Random.nextInt(dieSides) + 1)
-
-//        val rolledValue = (Random.nextInt(dieSides) + 1)
-//        dieTextView.text = rolledValue.toString()
-//        currentValue = rolledValue
-    }
-
-    //adding companion that executes alongside the fragments instantiation
-
-    companion object {
-        private const val DIESIDE = "sidenumber"
-
-        fun newInstance(sides: Int): DieFragment {
-            val fragment = DieFragment()
-            fragment.arguments = Bundle().apply {
+    companion object{
+        fun newInstance(sides: Int) = DieFragment().apply{
+            arguments = Bundle().apply{
                 putInt(DIESIDE, sides)
             }
-            return fragment
         }
     }
 
