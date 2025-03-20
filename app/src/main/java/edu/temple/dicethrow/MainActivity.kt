@@ -10,6 +10,11 @@ import androidx.core.view.get
 import androidx.fragment.app.FragmentContainerView
 
 class MainActivity : AppCompatActivity() {
+    
+    val dieViewModel : DieViewModel by lazy {
+
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

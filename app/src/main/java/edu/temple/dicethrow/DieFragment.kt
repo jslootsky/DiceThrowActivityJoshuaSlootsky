@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import kotlin.random.Random
 
 class DieFragment : Fragment() {
@@ -19,6 +20,9 @@ class DieFragment : Fragment() {
 
     var dieSides: Int = 6
 
+    //lateinit because it is an object
+    lateinit var dieViewModel: DieViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -26,6 +30,9 @@ class DieFragment : Fragment() {
                 dieSides = this
             }
         }
+
+        //fragment is made the parent with 'this' meaning the activity cannot see the ViewModel instance
+        dieViewModel = ViewModelProvider(this)[DieViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -38,27 +45,27 @@ class DieFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(CURRENT_DIE_VALUE_KEY, currentValue)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //(lifeCycle, observer)
+        //
+        dieViewModel.getCurrentRoll().observe(viewLifecycleOwner){
+            dieTextView.text = it.toString()
+        }
+
         if(savedInstanceState == null){
             throwDie()
-        }else{
-            currentValue = savedInstanceState.getInt(CURRENT_DIE_VALUE_KEY, 0)
-            dieTextView.text = currentValue.toString()
         }
 
     }
 
     fun throwDie() {
-        val rolledValue = (Random.nextInt(dieSides) + 1)
-        dieTextView.text = rolledValue.toString()
-        currentValue = rolledValue
+        dieViewModel.setCurrentRoll(Random.nextInt(dieSides) + 1)
+
+//        val rolledValue = (Random.nextInt(dieSides) + 1)
+//        dieTextView.text = rolledValue.toString()
+//        currentValue = rolledValue
     }
 
     //adding companion that executes alongside the fragments instantiation
